@@ -1,6 +1,6 @@
-# Business Intelligence Hub
+# Business Intelligence Hub (SciKiq-BI)
 
-A comprehensive business intelligence dashboard application built with Django backend and Next.js frontend.
+A comprehensive business intelligence dashboard application built with Django backend and Next.js frontend, unified in a single Git repository.
 
 ## Project Structure
 
@@ -14,7 +14,13 @@ business_intelligence_hub/
 │   ├── supply_chain/       # Supply chain app (based on SCD5.py)
 │   ├── hr/                 # HR analytics app (based on hrhead4.py)
 │   └── requirements.txt    # Python dependencies
-└── frontend/               # Next.js frontend (to be created)
+├── frontend/               # Next.js frontend
+│   ├── src/               # Source files
+│   ├── public/            # Static assets
+│   ├── package.json       # Node.js dependencies
+│   └── components.json    # Component configuration
+├── .gitignore             # Git ignore rules for both frontend and backend
+└── README.md              # This file
 ```
 
 ## Applications Overview
@@ -64,19 +70,21 @@ business_intelligence_hub/
   - Performance metrics
   - Payroll analytics
 
-## Backend Setup
+## Development Setup
 
-### Prerequisites
+### Backend Setup
+
+#### Prerequisites
 
 - Python 3.12+
 - Virtual environment
 
-### Installation
+#### Installation
 
 1. Navigate to the backend directory:
 
    ```bash
-   cd business_intelligence_hub/backend
+   cd backend
    ```
 
 2. Install dependencies:
@@ -95,6 +103,42 @@ business_intelligence_hub/
    ```bash
    python manage.py runserver 8000
    ```
+
+### Frontend Setup
+
+#### Prerequisites
+
+- Node.js 18+
+- npm or yarn or bun
+
+#### Installation
+
+1. Navigate to the frontend directory:
+
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   bun install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   bun dev
+   ```
+
+The frontend will be available at `http://localhost:3000` and the backend API at `http://localhost:8000`.
 
 ### API Endpoints
 
@@ -160,12 +204,13 @@ The application reads data from CSV files located in the parent directory:
 - **Plotly** - Data visualization
 - **Django CORS Headers** - Cross-origin requests
 
-### Frontend (To be implemented)
+### Frontend (Implemented)
 
-- **Next.js** - React framework
+- **Next.js 15** - React framework
 - **Tailwind CSS** - Styling
-- **Chart.js/Recharts** - Charts and graphs
-- **Axios** - HTTP client
+- **TypeScript** - Type safety
+- **Bun** - Fast JavaScript runtime and package manager
+- **shadcn/ui** - UI component library
 
 ## Current Status
 
@@ -177,20 +222,24 @@ The application reads data from CSV files located in the parent directory:
 - CORS configuration for frontend communication
 - Shared utilities for data processing
 - Basic API views with placeholder data
+- Next.js frontend application set up
+- Unified Git repository structure
+- Comprehensive .gitignore for both backend and frontend
 
 🚧 **In Progress:**
 
 - Implementing actual data processing logic in views
 - Creating comprehensive data models
+- Building frontend dashboard components
 
 📋 **To Do:**
 
-- Create Next.js frontend application
 - Implement authentication and authorization
 - Add comprehensive error handling
 - Implement Azure OpenAI integration
 - Add data caching and optimization
 - Create deployment configurations
+- Connect frontend with backend APIs
 
 ## Next Steps
 
@@ -200,12 +249,12 @@ The application reads data from CSV files located in the parent directory:
    - Add proper error handling and validation
    - Integrate Azure OpenAI for commentary generation
 
-2. **Create Frontend:**
+2. **Frontend Development:**
 
-   - Set up Next.js application
-   - Create responsive dashboard layouts
-   - Implement API integration
+   - Build responsive dashboard layouts
+   - Implement API integration with backend
    - Add interactive charts and visualizations
+   - Create component library
 
 3. **Testing and Deployment:**
    - Add unit tests
@@ -229,4 +278,5 @@ DATA_FOLDER=/path/to/csv/files
 AZURE_OPENAI_KEY=your-openai-key
 AZURE_OPENAI_ENDPOINT=your-openai-endpoint
 ```
+
 # SciKiq-BI
