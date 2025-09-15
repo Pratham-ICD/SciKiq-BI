@@ -38,22 +38,17 @@ const modules = [
     ],
   },
   {
-    id: 'analytics',
-    label: 'Analytics Hub',
-    icon: BarChart3,
-    tabs: [], // Will be added later
-  },
-  {
-    id: 'operations',
-    label: 'Operations',
-    icon: Settings,
-    tabs: [], // Will be added later
-  },
-  {
     id: 'hr',
-    label: 'Human Resources',
+    label: 'HR Dashboard',
     icon: Users,
-    tabs: [], // Will be added later
+    tabs: [
+      { id: 'hr-overview', label: 'People Overview', icon: Home },
+      { id: 'attrition-risk', label: 'Attrition Risk', icon: TrendingUp },
+      { id: 'recruiting', label: 'Recruiting', icon: FileText },
+      { id: 'engagement', label: 'Engagement & Performance', icon: BarChart3 },
+      { id: 'compensation', label: 'Comp & Equity', icon: DollarSign },
+      { id: 'absence', label: 'Absence', icon: Settings },
+    ],
   },
 ];
 

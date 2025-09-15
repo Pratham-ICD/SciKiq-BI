@@ -11,6 +11,17 @@ import PLChart from '@/components/charts/PLChart';
 import WorkingCapitalChart from '@/components/charts/WorkingCapitalChart';
 import CashFlowChart from '@/components/charts/CashFlowChart';
 import ARAPTable from '@/components/ARAPTable';
+
+// HR Components
+import HRFilterPanel from '@/components/hr/HRFilterPanel';
+import HRKPICards from '@/components/hr/HRKPICards';
+import PeopleOverviewCharts from '@/components/hr/PeopleOverviewCharts';
+import AttritionRiskTable from '@/components/hr/AttritionRiskTable';
+import RecruitingPipeline from '@/components/hr/RecruitingPipeline';
+import EngagementPerformance from '@/components/hr/EngagementPerformance';
+import CompensationEquity from '@/components/hr/CompensationEquity';
+import AbsenceManagement from '@/components/hr/AbsenceManagement';
+
 import {
   financialData,
   workingCapitalData,
@@ -18,6 +29,10 @@ import {
   apData,
   cashFlowData,
 } from '@/data/sampleData';
+
+// HR Data
+import { hrSampleData, hrFilterOptions } from '@/data/hrSampleData';
+
 import {
   filterFinancialData,
   filterWorkingCapitalData,
@@ -28,9 +43,21 @@ import {
   TableFilterOptions,
 } from '@/utils/dataFilters';
 
+// HR Utilities
+import {
+  filterEmployeeData,
+  calculateHRMetrics,
+  calculateAttritionRisk,
+  calculateDepartmentDiversity,
+  calculateMonthlyHiring,
+} from '@/utils/hrDataFilters';
+import { HRFilters } from '@/types/hr';
+
 export default function Home() {
   const [activeModule, setActiveModule] = useState('finance');
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Finance filters
   // Extract available filter options from data
   const availableCountries = useMemo(
     () =>
@@ -71,6 +98,14 @@ export default function Home() {
     sortOrder: 'desc' as 'asc' | 'desc',
   });
 
+  // HR filters
+  const [hrFilters, setHrFilters] = useState<HRFilters>({
+    dateRange: 'ytd',
+    departments: hrFilterOptions.departments.slice(0, 3), // Default to first 3 departments
+    locations: hrFilterOptions.locations, // Default to all locations
+    grades: hrFilterOptions.grades, // Default to all grades
+  });
+
   // Compute filtered data using useMemo for performance
   const filteredFinancialData = useMemo(
     () => filterFinancialData(financialData, filters),
@@ -107,6 +142,32 @@ export default function Home() {
     [filteredFinancialData, filteredWorkingCapitalData, filteredARData]
   );
 
+  // HR filtered data
+  const filteredEmployees = useMemo(
+    () => filterEmployeeData(hrSampleData.employees, hrFilters),
+    [hrFilters]
+  );
+
+  const hrMetrics = useMemo(
+    () => calculateHRMetrics(filteredEmployees),
+    [filteredEmployees]
+  );
+
+  const attritionRiskData = useMemo(
+    () => calculateAttritionRisk(filteredEmployees),
+    [filteredEmployees]
+  );
+
+  const departmentDiversity = useMemo(
+    () => calculateDepartmentDiversity(filteredEmployees),
+    [filteredEmployees]
+  );
+
+  const monthlyHiring = useMemo(
+    () => calculateMonthlyHiring(filteredEmployees),
+    [filteredEmployees]
+  );
+
   const handleFilterChange = (newFilters: FilterOptions) => {
     setFilters(newFilters);
     console.log('Filters updated:', newFilters);
@@ -117,7 +178,31 @@ export default function Home() {
     console.log('Table filters updated:', newFilters);
   };
 
+  const handleHRFilterChange = (newFilters: HRFilters) => {
+    setHrFilters(newFilters);
+    console.log('HR Filters updated:', newFilters);
+  };
+
   const getPageTitle = () => {
+    if (activeModule === 'hr') {
+      switch (activeTab) {
+        case 'hr-overview':
+          return 'People Overview';
+        case 'attrition-risk':
+          return 'Attrition Risk Analysis';
+        case 'recruiting':
+          return 'Recruiting Pipeline';
+        case 'engagement':
+          return 'Engagement & Performance';
+        case 'compensation':
+          return 'Compensation & Equity';
+        case 'absence':
+          return 'Absence Management';
+        default:
+          return 'HR Dashboard';
+      }
+    }
+
     switch (activeTab) {
       case 'overview':
         return 'Financial Overview';
@@ -137,6 +222,25 @@ export default function Home() {
   };
 
   const getPageSubtitle = () => {
+    if (activeModule === 'hr') {
+      switch (activeTab) {
+        case 'hr-overview':
+          return 'Employee metrics, hiring trends, and diversity analytics';
+        case 'attrition-risk':
+          return 'Risk scoring and retention insights';
+        case 'recruiting':
+          return 'Candidate pipeline and hiring funnel analysis';
+        case 'engagement':
+          return 'Performance ratings and engagement trends';
+        case 'compensation':
+          return 'Salary analysis and pay equity insights';
+        case 'absence':
+          return 'Leave utilization and absence patterns';
+        default:
+          return 'People analytics and workforce insights';
+      }
+    }
+
     switch (activeTab) {
       case 'overview':
         return 'Key performance indicators and financial metrics';
@@ -156,6 +260,91 @@ export default function Home() {
   };
 
   const renderContent = () => {
+    if (activeModule === 'hr') {
+      return (
+        <div className='space-y-6'>
+          <div className='mb-6'>
+            <HRFilterPanel
+              onFilterChange={handleHRFilterChange}
+              availableDepartments={[
+                'Sales',
+                'Marketing',
+                'Operations',
+                'Finance',
+                'HR',
+                'IT',
+                'Procurement',
+                'Logistics',
+                'Quality',
+              ]}
+              availableLocations={[
+                'Dubai',
+                'Abu Dhabi',
+                'Sharjah',
+                'Riyadh',
+                'Doha',
+              ]}
+              availableGrades={['G1', 'G2', 'G3', 'M1', 'M2', 'D1']}
+            />
+          </div>
+
+          {activeTab === 'hr-overview' && (
+            <>
+              <HRKPICards metrics={hrMetrics} />
+              <PeopleOverviewCharts
+                monthlyHiring={monthlyHiring}
+                departmentDiversity={departmentDiversity}
+              />
+            </>
+          )}
+
+          {activeTab === 'attrition-risk' && (
+            <>
+              <HRKPICards metrics={hrMetrics} />
+              <AttritionRiskTable riskEmployees={attritionRiskData} />
+            </>
+          )}
+
+          {activeTab === 'recruiting' && (
+            <>
+              <HRKPICards metrics={hrMetrics} />
+              <RecruitingPipeline
+                requisitions={hrSampleData.requisitions}
+                candidates={hrSampleData.candidates}
+              />
+            </>
+          )}
+
+          {activeTab === 'engagement' && (
+            <>
+              <HRKPICards metrics={hrMetrics} />
+              <EngagementPerformance
+                employees={filteredEmployees}
+                engagementData={hrSampleData.engagementMonthly}
+              />
+            </>
+          )}
+
+          {activeTab === 'compensation' && (
+            <>
+              <HRKPICards metrics={hrMetrics} />
+              <CompensationEquity employees={filteredEmployees} />
+            </>
+          )}
+
+          {activeTab === 'absence' && (
+            <>
+              <HRKPICards metrics={hrMetrics} />
+              <AbsenceManagement
+                employees={filteredEmployees}
+                leaveData={hrSampleData.leaves}
+              />
+            </>
+          )}
+        </div>
+      );
+    }
+
     if (activeModule !== 'finance') {
       return (
         <div className='flex items-center justify-center h-96'>
