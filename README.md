@@ -1,6 +1,6 @@
 # Finance Cockpit - Next.js Dashboard
 
-A modern, responsive finance dashboard built with Next.js, TypeScript, Tailwind CSS, and Recharts. This application replaces the original Streamlit finance dashboard with a more polished and interactive user interface.
+A modern, responsive finance dashboard built with Next.js, TypeScript, Tailwind CSS, and Recharts. This application replaces the original Streamlit finance dashboard with a more polished and interactive user interface
 
 ## Features
 
